@@ -1,20 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width ,initial-scale=1.0 ">
-    <title>Email Bot</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/cd110130a0.js" crossorigin="anonymous"></script>
-  </head>
-  <body>
 
-    <div class="container">
-      <form action="index2.html" class="search-bar">
-        <input type="text" placeholder="Write an email to Niranjan regarding Mini Project" name="q">
-        <button type="submit"><img src="search.png"></button>
-      </form>
-    </div>
-  </body>
+<head>
+    <title>ChatGPT API Demo</title>
+    <style>
+        input[type="text"] {
+            width: 100%;
+            height: 40px;
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: none;
+            outline: none;
+            resize: vertical;
+        }
+    </style>
+    <script>
+        function generateResponse(prompt) {
+            const apiKey = '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';
+
+            fetch('https://api.openai.com/v1/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey,
+                },
+                body: JSON.stringify({
+                    "model": "text-davinci-003",
+                    "prompt": prompt,
+                    'temperature': 0,
+                    'max_tokens': 2000,
+                    'top_p': 1,
+                    'frequency_penalty': 0.0,
+                    'presence_penalty': 0.0,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display the response
+                    const responseText = data.choices[0].text;
+                    document.getElementById('response').innerHTML = responseText;
+                    document.getElementById('status').innerHTML = 'Request successful';
+                })
+                .catch(error => {
+                    // Display the error message
+                    document.getElementById('status').innerHTML = 'Request unsuccessful';
+                    document.getElementById('error').innerHTML = error.message;
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ChatGPT API Demo</h1>
+    <label for="prompt">Enter a prompt:</label>
+    <input type="text" id="prompt" rows="3"></input>
+    <button onclick="generateResponse(document.getElementById('prompt').value)">Send</button>
+    <br>
+    <span id="status"></span>
+    <br>
+    <span id="response"></span>
+    <br>
+    <span id="error" style="color: red;"></span>
+</body>
+
 </html>
